@@ -93,4 +93,64 @@ describe('useWeather composable', () => {
     expect(tokyoWeather.value).toEqual(mockWeatherData)
     expect(todayTokyoWeather.value).toEqual(mockWeatherData.forecasts[0])
   })
+
+  describe('calcMaxRainChance関数', () => {
+    const { calcMaxRainChance } = useWeather()
+
+    test('引数がundefinedの場合は--%を返す', () => {
+      expect(calcMaxRainChance(undefined)).toBe('--%')
+    })
+
+    test('すべての時間帯が--%の場合は--%を返す', () => {
+      const forecast = ref<Forecast>({
+        ...mockWeatherData.forecasts[0]!,
+        chanceOfRain: {
+          T00_06: '--%',
+          T06_12: '--%',
+          T12_18: '--%',
+          T18_24: '--%'
+        }
+      })
+      expect(calcMaxRainChance(forecast)).toBe('--%')
+    })
+
+    test('すべての時間帯が同じ確率の場合はその値を返す', () => {
+      const forecast = ref<Forecast>({
+        ...mockWeatherData.forecasts[0]!,
+        chanceOfRain: {
+          T00_06: '30%',
+          T06_12: '30%',
+          T12_18: '30%',
+          T18_24: '30%'
+        }
+      })
+      expect(calcMaxRainChance(forecast)).toBe('30%')
+    })
+
+    test('異なる確率が混在する場合は最大値を返す', () => {
+      const forecast = ref<Forecast>({
+        ...mockWeatherData.forecasts[0]!,
+        chanceOfRain: {
+          T00_06: '10%',
+          T06_12: '50%',
+          T12_18: '30%',
+          T18_24: '20%'
+        }
+      })
+      expect(calcMaxRainChance(forecast)).toBe('50%')
+    })
+
+    test('--%と数値が混在する場合は数値の最大値を返す', () => {
+      const forecast = ref<Forecast>({
+        ...mockWeatherData.forecasts[0]!,
+        chanceOfRain: {
+          T00_06: '--%',
+          T06_12: '40%',
+          T12_18: '--%',
+          T18_24: '20%'
+        }
+      })
+      expect(calcMaxRainChance(forecast)).toBe('40%')
+    })
+  })
 })
