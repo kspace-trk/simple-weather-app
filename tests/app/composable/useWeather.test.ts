@@ -98,7 +98,7 @@ describe('useWeather composable', () => {
     const { calcMaxRainChance } = useWeather()
 
     test('引数がundefinedの場合は--%を返す', () => {
-      expect(calcMaxRainChance(undefined)).toBe('--%')
+      expect(calcMaxRainChance(ref(undefined))).toBe('--%')
     })
 
     test('すべての時間帯が--%の場合は--%を返す', () => {

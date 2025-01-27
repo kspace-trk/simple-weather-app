@@ -8,8 +8,8 @@ export const useWeather = () => {
     todayTokyoWeather.value = tokyoWeather.value.forecasts[0]
   }
 
-  const calcMaxRainChance = (forecast: Ref<Forecast> | undefined): string => {
-    if (!forecast) return '--%'
+  const calcMaxRainChance = (forecast: Ref<Forecast | undefined>): string => {
+    if (!forecast.value) return '--%'
 
     const chances = [
       forecast.value.chanceOfRain.T00_06,
