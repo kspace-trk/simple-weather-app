@@ -1,3 +1,16 @@
+<script setup lang="ts">
+const { todayTokyoWeather, getTokyoWeather, calcMaxRainChance } = useWeather()
+
+await getTokyoWeather()
+
+if (!todayTokyoWeather.value) {
+  throw new Error('天気情報の取得に失敗しました')
+}
+
+console.log('今日の東京の天気:', todayTokyoWeather.value)
+console.log('最高降水確率:', calcMaxRainChance(todayTokyoWeather))
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <UContainer class="py-8">
