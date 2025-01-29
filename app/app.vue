@@ -21,21 +21,28 @@ console.log('最高降水確率:', calcMaxRainChance(todayTokyoWeather))
             <div class="text-lg text-gray-500 dark:text-gray-400">東京</div>
             
             <div class="flex justify-center">
-              <UIcon name="i-heroicons-sun-20-solid" class="w-24 h-24 text-yellow-400" />
+              <img :src="todayTokyoWeather?.image.url" class="w-24 h-24" />
             </div>
 
-            <div class="text-4xl font-bold">24°C</div>
+            <div v-if="todayTokyoWeather?.temperature.max.celsius" class="text-4xl font-bold">
+              {{ todayTokyoWeather.temperature.max.celsius }}°C
+            </div>
+            <div v-else class="text-4xl font-bold">
+              <p class="text-gray-500 dark:text-gray-400">--°C</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">17時以降は取得できません</p>
+            </div>
             
-            <div class="text-gray-600 dark:text-gray-300">晴れ</div>
+            <div class="text-gray-600 dark:text-gray-300">{{ todayTokyoWeather?.telop }}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">{{ todayTokyoWeather?.detail.weather }}</div>
 
             <div class="grid grid-cols-2 gap-4 pt-4">
               <div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">風速</div>
-                <div class="font-medium">3m/s</div>
+                <div class="font-medium">{{ todayTokyoWeather?.detail.wind }}</div>
               </div>
               <div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">降水確率</div>
-                <div class="font-medium">10%</div>
+                <div class="font-medium">{{ calcMaxRainChance(todayTokyoWeather) }}%</div>
               </div>
             </div>
           </div>
@@ -48,6 +55,7 @@ console.log('最高降水確率:', calcMaxRainChance(todayTokyoWeather))
             color="gray" 
             variant="ghost"
             label="更新" 
+            @click="getTokyoWeather"
           />
         </div>
       </div>
